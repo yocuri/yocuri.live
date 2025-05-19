@@ -1,0 +1,1 @@
+[20JAN2025] U.S. president Donald Trump signed Executive Order 14172, directing the U.S. interior secretary to change the Gulf of Mexico's name to the "Gulf of America" in U.S. federal government usage. Neither the private sector nor any foreign nation are bound by the order.

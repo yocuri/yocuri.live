@@ -1,0 +1,24 @@
+version: "3.8"
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  owncast:
+    image: gabekangas/owncast:latest
+    container_name: owncast
+    restart: unless-stopped
+    volumes:
+      - ./owncast/config:/app/data
+    networks:
+      - traefik_proxy
+    ports:
+      - "1935:1935"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.owncast.rule=Host(`stream.yocuri.live`)"
+      - "traefik.http.routers.owncast.entrypoints=websecure"
+      - "traefik.http.routers.owncast.tls.certresolver=le"
+      - "traefik.http.services.owncast.loadbalancer.server.port=8080"

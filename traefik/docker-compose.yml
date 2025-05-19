@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik:v2.11.24
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - --log.level=INFO
+      - --accesslog=true
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.network=traefik_proxy
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=noreply@faebol.com
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+    ports:
+      - 80:80
+      - 443:443
+#      - 8080:8080  # you might want to firewall this or remove it entirely
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+      - ./dynamic.yml:/etc/traefik/dynamic.yml
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external: true
