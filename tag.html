@@ -8,7 +8,7 @@ async function loadNotion() {
   // 🧭 Filter items that include a specific tag
   const desiredTag = "Predictions";
   const filtered = results.filter(item =>
-    item.properties.Tags?.multi_select?.some(tag => tag.name === desiredTag)
+    item.properties.tags?.multi_select?.some(tag => tag.name === desiredTag)
   );
 
   const container = document.getElementById("cards");
