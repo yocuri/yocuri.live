@@ -9,11 +9,19 @@ async function loadNotion() {
   results.forEach(item => {
     const props = item.properties;
     const name = props.Name?.title?.[0]?.plain_text || "(no title)";
-    const desc = props.Description?.rich_text?.[0]?.plain_text || "";
+    const content = props.content?.rich_text?.[0]?.plain_text || "";
+    const subtext = props.Sub-text?.rich_text?.[0]?.plain_text || "";
+    const subitem = props.Sub-item?.rich_text?.[0]?.plain_text || "";
+    const pageId = item.id.replace(/-/g, "");
+    const link = `${notionBase}${pageId}`;
     const card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = `<h3>${name}</h3><p>${desc}</p>`;
-    container.appendChild(card);
+    card.innerHTML = `
+  <h3><a href="${link}" target="_blank">${name}</a></h3>
+  <p>${subtext}</p>
+  <p>${content}</p>
+  <small>${subitem}</small>
+`;
   });
 }
 
@@ -28,4 +36,31 @@ loadNotion();
   margin: 1em 0;
   background: #fafafa;
 }
+
+#cards {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  padding: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.1s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+}
+.card a {
+  color: #0077ff;
+  text-decoration: none;
+}
+.card small {
+  color: #555;
+  font-style: italic;
+}
+
 </style>
