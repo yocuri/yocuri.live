@@ -3,11 +3,11 @@
 <script>
 async function loadNotion() {
   const res = await fetch("/notion");
-  const notionBase = "https://notion.so/";
   const { results } = await res.json();
 
   const container = document.getElementById("cards");
   results.forEach(item => {
+    const notionBase = "https://notion.so/";
     const props = item.properties;
     const name = props.Name?.title?.map(t => t.plain_text).join('') || "(no title)";
     const desc = props["Sub-text"]?.rich_text?.[0]?.plain_text || "";
@@ -15,7 +15,7 @@ async function loadNotion() {
   const link = `${notionBase}${pageId}`;
     const card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = `<h3><a href="${link}" target="_blank">${name}${contname}</a></h3><p>${desc}</p>`;
+    card.innerHTML = `<h3><a href="${link}" target="_blank">${name}</a></h3><p>${desc}</p>`;
     container.appendChild(card);
   });
 }
