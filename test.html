@@ -6,6 +6,7 @@ async function loadNotion() {
   const { results } = await res.json();
 
   const container = document.getElementById("cards");
+  const notionBase = "https://notion.so/";
   results.forEach(item => {
     const props = item.properties;
     const name = props.Name?.title?.[0]?.plain_text || "(no title)";
@@ -30,14 +31,6 @@ loadNotion();
 </script>
 
 <style>
-.card {
-  border: 1px solid #ccc;
-  padding: 1em;
-  border-radius: 10px;
-  margin: 1em 0;
-  background: #fafafa;
-}
-
 #cards {
   display: grid;
   gap: 1.2rem;
@@ -63,5 +56,4 @@ loadNotion();
   color: #555;
   font-style: italic;
 }
-
 </style>
