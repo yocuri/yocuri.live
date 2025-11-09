@@ -12,7 +12,7 @@ async function loadNotion() {
     const name = props.Name?.title?.map(t => t.plain_text).join('') || "(no title)";
     const desc = props["Sub-text"]?.rich_text?.[0]?.plain_text || "";
     const pageId = item.id.replace(/-/g, "");
-  const link = `${notionBase}${pageId}`;
+    const link = `${notionBase}${pageId}`;
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `<h3><a href="${link}" target="_blank">${name}</a></h3><p>${desc}</p>`;

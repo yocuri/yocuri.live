@@ -1,0 +1,65 @@
+<div id="filters"></div>
+<div id="cards"></div>
+
+<script>
+async function loadNotion(selectedTag = null) {
+  const res = await fetch("/notion");
+  const { results } = await res.json();
+
+  const allTags = new Set();
+  results.forEach(item =>
+    item.properties.Tags?.multi_select?.forEach(tag => allTags.add(tag.name))
+  );
+
+  // 🪄 Generate tag buttons dynamically
+  const filters = document.getElementById("filters");
+  filters.innerHTML = Array.from(allTags)
+    .map(tag => `<button onclick="loadNotion('${tag}')">${tag}</button>`)
+    .join('') + `<button onclick="loadNotion()">All</button>`;
+
+  const filtered = selectedTag
+    ? results.filter(item =>
+        item.properties.Tags?.multi_select?.some(tag => tag.name === selectedTag)
+      )
+    : results;
+
+  const container = document.getElementById("cards");
+  container.innerHTML = "";
+  filtered.forEach(item => {
+    const props = item.properties;
+    const name = props.Name?.title?.map(t => t.plain_text).join('') || "(no title)";
+    const tags = props.Tags?.multi_select?.map(t => t.name).join(", ") || "";
+    const subtext = props["Sub-text"]?.rich_text?.map(t => t.plain_text).join('') || "";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${name}</h3>
+      <p>${subtext}</p>
+      <small>${tags}</small>
+    `;
+    container.appendChild(card);
+  });
+}
+
+loadNotion();
+</script>
+
+<style>
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem;
+}
+#filters button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+#filters button:hover {
+  background: #0077ff;
+  color: white;
+}
+</style>
